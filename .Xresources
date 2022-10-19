@@ -1,0 +1,61 @@
+URxvt.perl-ext-common:-confirm-paste,resize-font,default,matcher,url-select,fullscreen,selection-to-clipboard
+URxvt.clipboard.autocopy: true
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.keysym.F11: perl:fullscreen:switch
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
+URxvt.colorUL: #faaaaa
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+URxvt.resize-font.step: 1
+URxvt.scrollBar: false
+URxvt.font: xft:hack:pixelsize=13
+URxvt*scrollTtyKeypress: true
+URxvt*scrollWithBuffer: true
+URxvt.keysym.C-Down:  resize-font:smaller
+URxvt.keysym.C-Up:    resize-font:bigger
+
+URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.url-select.launcher: /usr/bin/xdg-open
+URxvt.url-select.underline: true
+urxvt*depth: 32
+urxvt*background: rgba:0000/0000/0200/c800
+
+! special
+*.foreground:   #befff5
+*.background:   #000000
+*.cursorColor:  #befff5
+
+! black
+*.color0:       #172e4b
+*.color8:       #fdd9ea
+
+! red
+*.color1:       #2253f4
+*.color9:       #ed8dbe
+
+! green
+*.color2:       #00bb68
+*.color10:      #6fe7f6
+
+! yellow
+*.color3:       #299592
+*.color11:      #50d6f7
+
+! blue
+*.color4:       #5b9c74
+*.color12:      #0aff83
+
+! magenta
+*.color5:       #c8aadc
+*.color13:      #4ed7ad
+
+! cyan
+*.color6:       #4b3c71
+*.color14:      #5bc6e3
+
+! white
+*.color7:       #c5c699
+*.color15:      #fdb78a
+
