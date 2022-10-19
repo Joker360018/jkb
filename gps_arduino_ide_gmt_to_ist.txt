@@ -1,0 +1,182 @@
+
+#define BLYNK_PRINT Serial
+
+
+
+#include <TinyGPS++.h>
+#include <SoftwareSerial.h>
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
+#include <SPI.h>
+#include <Ethernet.h>
+
+int RXPin = 16;
+int TXPin = 17;
+int gpslat,gpslng,gpsalt,gpsdate,gpsmonth,gpsyear,gpshour,gpsmin,gpssec,hour,ap,i,date,gpsno,gphour;
+int GPSBaud = 9600;
+TinyGPSPlus gps;
+SoftwareSerial gpsSerial(RXPin, TXPin);
+
+char auth[] = "T2DWZfVMkEvSnLNtMy0NnThvQv0TF4j6";
+
+
+char ssid[] = "Tilokani_4G";
+char pass[] = "23307242";
+WidgetMap myMap(V10);
+float m,lat,lng;
+
+int ind=1;
+void setup()
+{
+
+  Serial.begin(9600);
+  gpsSerial.begin(GPSBaud);
+  Blynk.begin(auth, ssid, pass, IPAddress(192,168,29,217), 8080);
+  lat = gps.location.lat();
+  lng = gps.location.lng();
+  myMap.location(ind, lat, lng, "value");
+}
+
+
+
+
+void loop()
+{
+   while (gpsSerial.available() > 0)
+    if (gps.encode(gpsSerial.read()))
+      displayInfo();
+      day();
+  Blynk.run();
+}
+
+
+
+
+void displayInfo()
+{ 
+  gpslat=gps.location.lat();
+  gpslng=gps.location.lng();
+  gpsalt=gps.altitude.meters();
+  gpsdate=gps.date.day();
+  gpsmonth=gps.date.month();
+  gpsyear=gps.date.year();
+  gpshour=gps.time.hour();
+  gpsmin=gps.time.minute() + 30;
+  gpssec=gps.time.second();
+  gpsno=gps.satellites.value();
+
+  //now 24 to 12 
+
+ if(gpshour > 12)
+{
+  gphour = gpshour - 12;
+}
+else
+{
+  gphour = gpshour;
+}
+hour = gphour + 5;
+
+if(hour > 12)
+{
+  hour=hour-12;
+}
+
+// am and pm
+  
+  if(gpshour+5 < 12)
+  {
+    ap=0;
+  }  
+  if(gpshour+5 > 12)
+  {
+    ap=1;
+  }
+  if(gpshour+5 == 12)
+  {
+    ap=0;
+  }
+  
+// min 
+  if(gpsmin > 60)
+  {
+    m = gpsmin - 60;
+  }
+  else
+  {
+    m=gpsmin;
+  }
+
+ if(i == 0)
+ {
+   Blynk.virtualWrite(V9,"am");
+ }
+if(i == 1)
+{
+  Blynk.virtualWrite(V9,"pm");
+}
+if(gpshour+5 > 24)
+{
+  date = gpsdate + 1;
+}
+else
+{
+  date = gpsdate;
+}
+Blynk.virtualWrite(V0,gpslat);
+Blynk.virtualWrite(V1,gpslng);
+Blynk.virtualWrite(V2,gpsalt);
+Blynk.virtualWrite(V3,date);
+Blynk.virtualWrite(V4,gpsmonth);
+Blynk.virtualWrite(V5,gpsyear);
+Blynk.virtualWrite(V6,hour);
+Blynk.virtualWrite(V7,m);
+Blynk.virtualWrite(V8,gpssec);
+Blynk.virtualWrite(V12,gpsno);
+  delay(1000);
+}
+
+
+void day()
+{
+int mh[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
+int j,s;
+if( (gpsyear % 400 == 0) || ((gpsyear % 4 == 0) && (gpsyear % 100 != 0)) ) 
+  mh[1] = 29 ; 
+ for(j = 0 ; j < gpsmonth - 1 ; j++) 
+  s = s + mh[j] ; 
+ s = s + (date + gpsyear + (gpsyear / 4) - 2) ; 
+ s = s % 7 ; 
+
+if(s==0)
+{
+  Blynk.virtualWrite(V11,"Sunday");
+}
+if(s==1)
+{
+  Blynk.virtualWrite(V11,"Monday");
+}
+if(s==2)
+{
+  Blynk.virtualWrite(V11,"Tuesday");
+}
+if(s==3)
+{
+  Blynk.virtualWrite(V11,"Wednesday");
+}
+if(s==4)
+{
+  Blynk.virtualWrite(V11,"Thursday");
+}
+if(s==5)
+{
+  Blynk.virtualWrite(V11,"Friday");
+}
+if(s==6)
+{
+  Blynk.virtualWrite(V11,"Saturday");
+}
+
+
+}
