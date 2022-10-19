@@ -18,11 +18,11 @@ int GPSBaud = 9600;
 TinyGPSPlus gps;
 SoftwareSerial gpsSerial(RXPin, TXPin);
 
-char auth[] = "T2DWZfVMkEvSnLNtMy0NnThvQv0TF4j6";
+char auth[] = "";
 
 
-char ssid[] = "Tilokani_4G";
-char pass[] = "23307242";
+char ssid[] = "";
+char pass[] = "";
 WidgetMap myMap(V10);
 float m,lat,lng;
 
